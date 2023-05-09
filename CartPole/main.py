@@ -1,9 +1,9 @@
 import gym
 import numpy as np
-
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adam
 
 from rl.agents import DQNAgent
 from rl.policy import BoltzmannQPolicy
@@ -30,14 +30,12 @@ agent = DQNAgent(
     target_model_update=0.01
 )
 
-print("howzit")
-
 # Mean absolute error = mae
-# agent.compile(Adam(lr=0.001), metrics=['mae'])
-# agent.fit(env, nb_steps=100000, visualize=False, verbose=1)
+agent.compile(tf.keras.optimizers.legacy.Adam(
+    learning_rate=0.001), metrics=['mae'])
+agent.fit(env, nb_steps=100000, visualize=False, verbose=1)
 
-
-# results = agent.test(env, nb_episodes=10, visualize=True)
-# print(np.mean(results.history['episode_reward']))
+results = agent.test(env, nb_episodes=10, visualize=True)
+print(np.mean(results.history['episode_reward']))
 
 env.close()
